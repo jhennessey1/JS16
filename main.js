@@ -28,7 +28,10 @@ var Drink = function(name, description, price, ingredients) {
 }
 
 var Plate = function(name, description, price, ingredients) {
-	Plate.call(this, name, description, price, ingredients)
+	this.name = name;
+	this.description = description;
+	this.price = price;
+	this.ingredients = ingredients;
 }
 
 var Order = function(plates) {
@@ -36,7 +39,7 @@ var Order = function(plates) {
 }
 
 var Menu = function(plates) {
-	Order.call(this, plates)
+	this.plates = plates;
 }
 
 var Restaurant = function(name, description, menu) {
@@ -50,18 +53,49 @@ var Customer = function(dietaryPreference) {
 }
 
 Drink.prototype.stringify = function() {
-	return ("Name: " + this.name + ". Description: " + this.description + ". Price: $" + this.price + ". Ingredients: " + this.ingredients + ".")
+	var iterate = function(ingredients){
+		var ingredientArray = []
+		for(var i=0; i < ingredients.length; i++){
+			ingredientArray.push(ingredients[i].stringify())
+		}
+		return ingredientArray.join(', ')
+	}
+	return ("Name: " + this.name + ". Description: " + this.description + ". Price: $" + this.price + ". Ingredients: " + iterate(this.ingredients) + ".")
 }
 
-Plate.prototype = new Drink()
+Plate.prototype.stringify = function() {
+	
+	var iterate = function(ingredients){
+		var ingredientArray = []
+		for(var i=0; i < ingredients.length; i++){
+			ingredientArray.push(ingredients[i].stringify())
+		}
+		return ingredientArray.join(', ')
+	}
+	return ("Name: " + this.name + ". Description: " + this.description + ". Price: $" + this.price + ". Ingredients: " + iterate(this.ingredients) + ".")
+}
 
 Order.prototype.stringify = function() {
-	for(plate in plates) {
-		return plate.prototype.stingify()
+	var iterate = function(plates) {
+		var plateArray = []
+		for(var i = 0; i < plates.length; i++){
+			plateArray.push(plates[i].stringify())
+		}
+		return plateArray.join(', ')
 	}
+	return ("Order: " + iterate(this.plates))
 }
 
-Menu.prototype = new Order()
+Menu.prototype.stringify = function() {
+	var iterate = function(plates) {
+		var plateArray = []
+		for(var i = 0; i < plates.length; i++){
+			plateArray.push(plates[i].stringify())
+		}
+		return plateArray.join(', ')
+	}
+	return ("Menu: " + iterate(this.plates))
+	}
 
 Restaurant.prototype.stringify = function() {
 	return ("Name: " + this.name + ". Description: " + this.description + ". Menu: " + menu.stringify() + ".")
@@ -106,7 +140,7 @@ var beans = new FoodItem('Beans', 120, true, true, true)
 
 var meat = new FoodItem('Meat', 180, false, true, true)
 
-var burritoPlate = new Plate('Burrito', 'Rice, beans, and meat in a tortilla', 9, [rice, beans, meat, torilla])
+var burritoPlate = new Plate('Burrito', 'Rice, beans, and meat in a tortilla', 9, [rice, beans, meat, tortilla])
 
 var avocado = new FoodItem('Avocado', 230, true, true, true)
 
@@ -118,7 +152,9 @@ var limeJuice = new FoodItem('Lime Juice', 90, true, true, false)
 
 var margarita = new Drink('Margarita', 'Tequila and Lime Juice', 7, [tequila, limeJuice])
 
+var menu = new Menu([burritoPlate, guacamole, margarita])
 
+var chipotle = new Restaurant("Chipotle", "Burrito Joint", menu)
 
 
 
