@@ -28,10 +28,7 @@ var Drink = function(name, description, price, ingredients) {
 }
 
 var Plate = function(name, description, price, ingredients) {
-	this.name = name;
-	this.description = description;
-	this.price = price;
-	this.ingredients = ingredients;
+	Plate.call(this, name, description, price, ingredients)
 }
 
 var Order = function(plates) {
@@ -39,7 +36,7 @@ var Order = function(plates) {
 }
 
 var Menu = function(plates) {
-	this.plates = plates;
+	Order.call(this, plates)
 }
 
 var Restaurant = function(name, description, menu) {
@@ -56,9 +53,7 @@ Drink.prototype.stringify = function() {
 	return ("Name: " + this.name + ". Description: " + this.description + ". Price: $" + this.price + ". Ingredients: " + this.ingredients + ".")
 }
 
-Plate.prototype.stringify = function() {
-	return ("Name: " + this.name + ". Description: " + this.description + ". Price: $" + this.price + ". Ingredients: " + this.ingredients + ".")
-}
+Plate.prototype = new Drink()
 
 Order.prototype.stringify = function() {
 	for(plate in plates) {
@@ -66,11 +61,7 @@ Order.prototype.stringify = function() {
 	}
 }
 
-Menu.prototype.stringify = function() {
-	for(plate in plates) {
-		return plate.prototype.stingify()
-	}
-}
+Menu.prototype = new Order()
 
 Restaurant.prototype.stringify = function() {
 	return ("Name: " + this.name + ". Description: " + this.description + ". Menu: " + menu.stringify() + ".")
